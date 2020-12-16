@@ -8,8 +8,10 @@ Created on Tue Dec  8 22:14:06 2020
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd 
+import Inv
 
-#serve un tasso? 
+#come metto il tasso? 
+r = 0.1 #per ora lo metto qui
 
 def main():
     global r
@@ -24,49 +26,46 @@ def main():
         print('6) Calcola il TIR')
         print('7) Grafico VAN-r')
         print('8) PayBack Period')
-        print('9) Inserisci altri flussi e confrontali con i precedenti')
+        print('9) Inserisci altri flussi e confrontali con i precedenti') #questo penso che lo toglierò 
         print('10) Altra visualizzazione dei dati')
         print('11) Altra visualizzazione del confronto')
         print('0) Esci')
     
         choice = input('Scelta: ')
         
-        if choice == '1':
+        if choice == '1': #Aggiungi dei flussi
             C0 = float(input('Primo flusso: '))
-            invo = 
+            invo = Inv(C0)
             a = str(input('Altri? si/no '))
             if a == 'si':
                 n = int(input('Quanti? '))
                 i = 0
+                F = []
                 while i < n:
                     Fj = float(input('Flusso: '))
-                    flussi.append(Fj) 
+                    F.append(Fj)
                     i += 1
+                invo.add_tail(F)
+            invs.append(invo)
             else:
                 pass
                 
-        elif choice == '2':
-            print(f'C_0: {C0}€') #AltGr + E; AltGr + 5
-            for i in flussi:
-                d = flussi.index(i) + 1
-                print(f'F_{d}: {i}€')
-            print()
-                
-        elif choice == '3': #np.npv(rate,values)
-            if len(set(flussi)) != 1:
-                VAN(C0,flussi)
-                print(f'Attualizzato secondo il metodo del VAN.\nFattore di sconto: {r}')
+        elif choice == '2': #Visualizza i flussi
+            for i in invs:
+                print(f'Investimento {index(i) + 1}: {i}')
                 print()
                 
-            else:  #len(set(flussi)) == 1:
-                anni = len(flussi)
-                att = C0 + flussi[0]*FD(anni)
-                print(att)
-                print('Rendita costante, attualizzato col fattore di rendita.\nFattore di sconto: {r}')
-        
-        elif choice == '4':
+        elif choice == '3': #Attualizza
+            for i in invs:
+                print(f'Investimento {index(i) + 1}:')
+                i.VAN(r)
+                print()
+
+        elif choice == '4': #Aggiungi dei flussi a quelli già esistenti (in coda) 
+            p = int(input('Posizione investimento: '))
             c0 = str(input('Rimpiazzare il primo flusso? si/no '))
             if c0 == 'si':
+                invs[p].pop(p)       '''ARRIVATO FIN QUI''' 
                 C0 = float(input('Primo flusso: '))
             else:
                 pass
