@@ -21,8 +21,16 @@ class Inv(object):
         self.FDC = [C0] + flussi #una volta fatto questo, meglio usare gli array 
         self.f_ar = np.array(self.FDC) #li metto su array, non si sa mai
         self.len = self.f_ar.size #numero di elementi 
-        self.see = pd.Series(self.f_ar)
+        self.anni = []
+        for i in range(len(self.f_ar)):
+            a = 'anno '
+            self.anni.append(a+str(i))
+        self.see = pd.Series(self.f_ar,index=self.anni)
         self.statistics = self.see.describe()
+       #self.dict = {} #non fa 
+       #for j in self.anni:
+            #for k in self.f_ar:
+             #   self.dict[j] = k
 
     '''Blocco modifiche'''
     def add_tail(self,flussi): #flussi è una lista
