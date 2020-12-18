@@ -46,18 +46,20 @@ def main():
                     F.append(Fj)
                     i += 1
                 invo.add_tail(F)
-            invs.append(invo)
+                invs.append(invo)
             else:
                 pass
                 
         elif choice == '2': #Visualizza i flussi
             for i in invs:
-                print(f'Investimento {index(i) + 1}: {i}')
+                print(f'Investimento {invs.index(i)}:')
+                invs[i].getMembers()
+                #print(f'Investimento {invs.index(i) + 1}: {i}')
                 print()
                 
         elif choice == '3': #Attualizza
             for i in invs:
-                print(f'Investimento {index(i) + 1}:')
+                print(f'Investimento {invs.index(i) + 1}:')
                 i.VAN(r)
                 print()
 
@@ -65,11 +67,13 @@ def main():
             p = int(input('Posizione investimento: '))
             c0 = str(input('Rimpiazzare il primo flusso? si/no '))
             if c0 == 'si':
-                invs[p].pop(p)       '''ARRIVATO FIN QUI''' 
+                invs[p].pop(0)  
                 C0 = float(input('Primo flusso: '))
-            else:
-                pass
-            
+                invs[p].add_here(C0,0)
+                
+            #else:
+             #   pass
+'''            
             n = int(input('Quanti ne aggiungi? '))
             i = 0
             while i < n:
@@ -247,7 +251,7 @@ def main():
             
             flussi.pop(0)
             flussiB.pop(0)
-                    
-        elif choice == '0':
-           pass   
+'''                    
+        #elif choice == '0':
+         #   pass   
 main()

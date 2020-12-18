@@ -12,15 +12,19 @@ import matplotlib.pyplot as plt
 avere nel main quanti investimenti vuoi''' 
 
 class Inv(object):
-    def __init__(self,C0):
+    def __init__(self,C0,flussi):
         '''Crea l'investimento''' 
         self.C0 = C0
-        self.FDC = [C0]
-        self.f_vett = np.array(self.FDC) #li metto su array, non si sa mai
+        self.flussi = flussi
+        self.FDC = [C0] + flussi
+        self.f_ar = np.array(self.FDC) #li metto su array, non si sa mai
 
     '''Blocco modifiche'''
     def add_tail(self,flussi): #flussi è una lista
-        self.FDC = self.FDC + flussi #ricorda che li aggiunge in coda
+        #self.FDC = self.FDC + flussi #ricorda che li aggiunge in coda
+        #for i in flussi:
+            #self.FDC.append(i) 
+        self.f_ar.append()
     def add_here(self,flusso,posizione):
         self.FDC.insert(posizione,flusso)
     def pop(self,anno): 
