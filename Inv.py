@@ -32,10 +32,8 @@ class Inv(object):
             #for k in self.f_ar:
              #   self.dict[j] = k
              
-        self.van = round(np.npv(self.tasso,self.f_ar),4)
+        self.van = round(np.npv(self.r,self.f_ar),4)
         self.tir = round(np.irr(self.f_ar),4)
-        
-        
         
     '''Blocco modifiche'''
     def add_tail(self,flussi): #flussi è una lista
@@ -61,7 +59,8 @@ class Inv(object):
     def getMembers(self):
         '''Stampa la lista'''
         #return self.FDC[:] 
-        print(self.f_ar) 
+        #print(self.f_ar)
+        return self.f_ar
     '''
     def see(self): #pandas 
         ind = list(range(self.len))
@@ -95,37 +94,36 @@ class Inv(object):
     """
     def FD(self): #,tasso,anni): #fattore di rendita
         #anni = self.len
-        fd = 1/self.tasso - 1/(self.tasso*(1+self.tasso)**self.len)
+        fd = 1/self.r - 1/(self.r*(1+self.r)**self.len)
         return round(fd,4)
     def EA(self): #,tasso,anni): #ricontrollare!!
         #anni = self.len
-        van = round(np.npv(self.tasso,self.f_ar),4)
-        ea = van*(1/Inv.FD(self.tasso,self.len)) #non so se funziona!!
+        van = round(np.npv(self.r,self.f_ar),4)
+        ea = van*(1/Inv.FD(self)) #non so se funziona!!
         return round(ea,4) 
     
-    '''Blocco plot'''
+    '''Blocco plotter'''
     def plot(self):
         plt.ylabel('VAN')
         plt.xlabel('r')
         print(self.f_ar) #vedi se puoi chiamare getMembers invece
-        s = 0.01 #precisione sull'asse di r (step)       
+        s = 0.015 #precisione sull'asse di r (step)       
         x = np.arange(0,self.tir,s)
-        x = np.append(x,self.tir)
-        x = np.append(x,self.tir+s)
-        x = np.append(x,self.tir+2*s)
+        x1 = np.arange(self.tir,6*s+self.tir,s)
+        x = np.append(x,x1)
         y = np.array([])
         for i in x:      #np.append(x,[tir,tir+s,tir+2*s]):
             y0 = np.npv(i,self.f_ar)
-            y.append(y0)
+            y = np.append(y,y0)
             if np.size(x) == np.size(y):
                 xm = 0
-                xM = self.tir+3*s
+                xM = self.tir+6*s
                 plt.plot(x,y,'c-') #cyan(c)
                 plt.plot(x,y,'rx')
-                plt.plot([xm,xM],[0,0],'g--') #asse x
-                plt.plot([xm,self.r],[self.van,self.van]) #asse x dal van 
-                plt.plot([self.tir,self.tir],[0,y[0]]) #asse y sul tir
-                plt.plot([self.r,self.r],[0,y[0]]) #asse y sul VAN con r
+                plt.plot([xm,xM],[0,0],'g--') #asse x, tratteggiato in verde
+                plt.plot([xm,self.r],[self.van,self.van]) #asse x dal van, più scuro del ciano
+                plt.plot([self.tir,self.tir],[0,y[0]]) #asse y sul tir, in arancione 
+                plt.plot([self.r,self.r],[0,self.van]) #asse y sul VAN con r y[0]
                 plt.show() 
     def PBP(self):
         plt.ylabel('VAN')
@@ -135,10 +133,11 @@ class Inv(object):
         while j < self.len:
             van = round(np.npv(self.r,self.f_ar[:j+1]),4)
             vans = np.append(vans,van)
-            if vans[j] == 0.0: #è difficile beccare 0.0 
+            if vans[j] >= -100.0 and vans[j] <= 100.0: #è difficile beccare 0.0 
                 PBP = j
                 print(f'PBP: {PBP}')
             j += 1
+
         if vans.size == self.len:
             print(f'VAN progressivi: {vans}') 
             anni = np.array(range(self.len))
@@ -146,3 +145,38 @@ class Inv(object):
             plt.plot(anni,vans,'rx')
             plt.plot([0,self.len],[0,0],'g--')
             plt.show()  
+            
+           
+def is_positive(lista): #se la lista è positiva 
+    result = True
+    for i in lista:
+        if i > 0:
+            continue
+        else:
+            result = False
+    return result
+
+def from_positive(lista): #deve andare nel PBP 
+    c = -1
+    if lista[-1] < 0:
+        #return print('Non diventa mai positiva')
+        return False 
+    while c != -len(lista):
+        if lista[c] >= 0:
+            c -= 1
+        else:
+            return c+1
+    return 0
+    
+    
+    
+    
+            
+            
+            
+    
+
+
+
+
+        
