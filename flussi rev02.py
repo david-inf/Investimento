@@ -11,10 +11,10 @@ import pandas as pd
 import Inv
 
 #come metto il tasso? 
-r = 0.1 #per ora lo metto qui
+#r = 0.1 #per ora lo metto qui
 
 def main():
-    global r
+    #global r
     invs = []
     choice = ' '    
     while choice != '0':
@@ -73,7 +73,7 @@ def main():
                 
             #else:
              #   pass
-'''            
+           
             n = int(input('Quanti ne aggiungi? '))
             i = 0
             while i < n:
@@ -251,7 +251,7 @@ def main():
             
             flussi.pop(0)
             flussiB.pop(0)
-'''                    
-        #elif choice == '0':
-         #   pass   
+                    
+        elif choice == '0':
+            pass   
 main()
