@@ -5,14 +5,13 @@ Created on Wed Dec  2 10:49:41 2020
 @author: david
 """
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np, pandas as pd, matplotlib.pyplot as plt, psycopg2
 
 
 class Inv(object):
-    def __init__(self, C0, flussi, tasso=0.1):
+    def __init__(self, nome: str, C0: float, flussi: list, tasso=0.1):
         '''Crea l'investimento'''
+        self.nome = nome  # almeno lo identifico nel DB
         self.C0 = C0  # pagamento iniziale
         self.flussi = flussi
         self.r = tasso  # tasso di sconto
@@ -65,13 +64,7 @@ class Inv(object):
 
     def __str__(self):  # permette di usare print(oggetto_Inv)
         '''CONTROLLA SE FUNZIONA'''
-        self.series
-        print('Tasso:')
-        self.r
-        print('VAN:')
-        self.van
-        print('TIR:')
-        self.tir
+        return f'{self.series}\nTasso: {self.r}\nVAN: {self.van}\nTIR: {self.tir}'       
 
     '''Blocco matematica finanziaria'''  # anche se è tutto su __init__
 
@@ -162,3 +155,59 @@ def from_positive(lista):  # deve andare nel PBP
         else:
             return c+1
     return 0
+
+
+def hey_db(query: str):  # query sul database Azienda
+    con = psycopg2.connect(
+    host = '127.0.0.1',
+    database = 'Azienda',
+    user = 'postgres',
+    password = 'david25',
+    port = '5432')
+
+    cur = con.cursor()
+    q = query
+    cur.execute(q)
+    rows = cur.fetchall()  # lista di tuple
+
+    for r in rows:
+        print(r)
+
+    con.commit()  # refresh poi su pgadmin4
+    cur.close()
+    con.close()
+
+'''non fa'''
+def to_db(nome_inv: str, flussi):
+    con = psycopg2.connect(
+    host = '127.0.0.1',
+    database = 'Azienda',
+    user = 'postgres',
+    password = 'david25',
+    port = '5432')
+    cur = con.cursor()
+
+    for i in range(len(flussi)):
+        j = flussi[i]
+        cur.execute(f"insert into investimento values ({nome_inv}, {i}, {j})")
+    
+    cur.fetchall()
+
+    con.commit()  # refresh poi su pgadmin4
+    cur.close()
+    con.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
