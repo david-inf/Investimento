@@ -64,7 +64,7 @@ class Inv(object):
 
     def __str__(self):  # permette di usare print(oggetto_Inv)
         '''CONTROLLA SE FUNZIONA'''
-        return f'{self.series}\nTasso: {self.r}\nVAN: {self.van}\nTIR: {self.tir}'       
+        return f'Tasso: {self.r}\nVAN: {self.van}\nTIR: {self.tir}\n\n{self.series}'       
 
     '''Blocco matematica finanziaria'''  # anche se è tutto su __init__
 
@@ -86,7 +86,7 @@ class Inv(object):
         plt.ylabel('VAN')
         plt.xlabel('r')
         # print(self.f_ar)  # vedi se puoi chiamare getMembers invece
-        Inv.getMembers()
+        # Inv.getMembers(self)
         s = 0.015  # precisione sull'asse di r (step)
         x = np.arange(0, self.tir, s)
         x1 = np.arange(self.tir, 6*s+self.tir, s)
@@ -196,18 +196,3 @@ def to_db(nome_inv: str, flussi):
     con.commit()
     cur.close()
     con.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
