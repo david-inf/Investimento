@@ -185,15 +185,15 @@ def to_db(nome_inv: str, flussi):
     user = 'postgres',
     password = 'david25',
     port = '5432')
-    cur = con.cursor()
 
     for i in range(len(flussi)):
+        cur = con.cursor()
         j = flussi[i]
         cur.execute(f"insert into investimento values ({nome_inv}, {i}, {j})")
-    
+
     cur.fetchall()
 
-    con.commit()  # refresh poi su pgadmin4
+    con.commit()
     cur.close()
     con.close()
 
