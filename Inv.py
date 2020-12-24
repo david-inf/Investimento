@@ -10,7 +10,7 @@ import numpy as np, pandas as pd, matplotlib.pyplot as plt, psycopg2
 
 class Inv(object):
     def __init__(self, nome: str, C0: float, flussi: list, tasso=0.1):
-        '''Crea l'investimento'''
+        '''Crea l'investimento, passando un nome per identificarlo, l'esborso iniziale e i successivi movimenti.'''
         self.nome = nome  # almeno lo identifico nel DB
         self.C0 = C0  # pagamento iniziale
         self.flussi = flussi
@@ -36,44 +36,49 @@ class Inv(object):
 
     '''Blocco modifiche'''
 
-    def add_tail(self, flussi):  # flussi è una lista
+    def cg_add_tail(self, flussi: list):  # flussi è una lista; cg := change
+        '''Aggiunge elementi in coda'''
         # self.FDC = self.FDC + flussi #ricorda che li aggiunge in coda
         # for i in flussi:
         #   self.FDC.append(i)
         self.f_ar = np.append(self.f_ar, flussi)
 
-    def add_here(self, posizione, flusso):
+    def cg_add_here(self, posizione: int, flusso: float):
+        '''Aggiunge un elemento in una posizione precisa, l'anno'''
         # self.FDC.insert(posizione,flusso)
         self.f_ar = np.insert(self.f_ar, posizione, flusso)
 
-    def pop(self, anno):  # np.delete(array,index)
+    def cg_pop(self, anno: int):  # np.delete(array,index)
+        '''Rimuove un elemento indicando l'anno'''
         self.f_ar = np.delete(self.f_ar, anno)
 
     '''Blocco visualizzazione'''
 
-    def getMembers(self):
+    def see_getMembers(self):
         '''Stampa la lista'''
         # return self.FDC[:]
         # print(self.f_ar)
         return self.f_ar
 
-    def Member(self, flusso):
+    def see_Member(self, flusso: float):
         '''True se c'è, False altrimenti'''
         # return flusso in self.FDC
         return flusso in self.f_ar
 
-    def __str__(self):  # permette di usare print(oggetto_Inv)
-        '''CONTROLLA SE FUNZIONA'''
-        return f'Tasso: {self.r}\nVAN: {self.van}\nTIR: {self.tir}\n\n{self.series}'       
+    def __str__(self):  # permette di usare print(oggetto_Inv). Scelta migliore
+        '''print(oggetto_Inv)'''
+        return f'\nTasso: {self.r}\nVAN: {self.van}\nTIR: {self.tir}\n\n{self.series}'       
 
     '''Blocco matematica finanziaria'''  # anche se è tutto su __init__
 
-    def FD(self):  # fattore di rendita
+    def cl_FD(self):  # cl := calculate
+        '''Fattore di rendita'''
         # anni = self.len
         fd = 1/self.r - 1/(self.r*(1+self.r)**self.len)
         return round(fd, 4)
 
-    def EA(self):
+    def cl_EA(self):
+        '''Equivalente annuo'''
         # anni = self.len
         van = round(np.npv(self.r, self.f_ar), 4)
         ea = van*(1/Inv.FD(self))  # non so se funziona!!
@@ -81,10 +86,10 @@ class Inv(object):
 
     '''Blocco plotter'''
 
-    def van_tasso(self):
+    def plt_van_tasso(self):  # plt := plot
         '''Grafico VAN asse y, tasso r asse x'''
         plt.ylabel('VAN')
-        plt.xlabel('r')
+        plt.xlabel('r (tasso di sconto)')
         # print(self.f_ar)  # vedi se puoi chiamare getMembers invece
         # Inv.getMembers(self)
         s = 0.015  # precisione sull'asse di r (step)
@@ -106,14 +111,18 @@ class Inv(object):
                 plt.plot([self.r, self.r], [0, self.van])  # asse y sul VAN
                 plt.show()
 
-    def barre_box(self):
-        '''Grafico a barre e box-plot'''
+    def plt_bar(self):
+        '''Grafico a barre'''
         self.series.plot(kind='bar')
         plt.show()
+    
+    def plt_box_plot(self):
+        '''BOX-PLOT'''
         self.series.plot.box(vert=False, whis='range')
         plt.show()
 
-    def PBP(self):
+    def plt_PBP(self):
+        '''Payback period'''
         plt.ylabel('VAN')
         plt.xlabel('t (anni)')
         vans = np.array([])
@@ -126,7 +135,7 @@ class Inv(object):
                 print(f'PBP: {PBP}')
             j += 1
         if vans.size == self.len:
-            print(f'VAN progressivi: {vans}')
+            print(f'VAN progressivi: \n{vans}')
             anni = np.array(range(self.len))
             plt.plot(anni, vans, 'c-')
             plt.plot(anni, vans, 'rx')
@@ -196,3 +205,12 @@ def to_db(nome_inv: str, flussi):
     con.commit()
     cur.close()
     con.close()
+
+
+a = Inv('mario',-10000.00,[-300,-200,-200,0,50,300,800,1200,3000,4000,6000,12000,14000,20000,30000])
+# i grafici vengono mostrati uno alla volta, chiudendoli via via
+#print(a)
+#a.PBP()
+#a.van_tasso()
+#a.bar()
+#a.box_plot()
