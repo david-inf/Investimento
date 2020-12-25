@@ -210,7 +210,7 @@ def to_db(nome_inv: str, flussi):
 a = Inv('mario',-10000.00,[-300,-200,-200,0,50,300,800,1200,3000,4000,6000,12000,14000,20000,30000])
 # i grafici vengono mostrati uno alla volta, chiudendoli via via
 #print(a)
-#a.PBP()
-#a.van_tasso()
-#a.bar()
-#a.box_plot()
+#a.plt_PBP()
+#a.plt_van_tasso()
+#a.plt_bar()
+#a.plt_box_plot()
