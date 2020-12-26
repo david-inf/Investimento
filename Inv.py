@@ -25,6 +25,8 @@ class Inv(object):
             self.anni.append(a+str(i))
 
         self.series = pd.Series(self.f_ar, index=self.anni)
+        self.series.name = nome
+        self.series.index.name = self.anni
         self.statistics = self.series.describe()
 
         self.dict = {}  # controllare
@@ -142,6 +144,24 @@ class Inv(object):
             plt.plot([0, self.len], [0, 0], 'g--')
             plt.show()
 
+    def plt_plot_all(self):  # riguardare
+        '''Plot dei 4 precendenti insieme'''
+        fig, axs = plt.subplots(2, 2)
+        #axs[0, 0].plot(x, y)
+        #axs[0, 0].set_title('VAN-TASSO')
+        #axs[0, 1].hist(self.f_ar)
+        #axs[0, 1].set_title('BARRE')
+        #axs[1, 0].plot(x, -y, 'tab:green')
+        #axs[1, 0].set_title('BOX-PLOT')
+        #axs[1, 1].plot(x, -y, 'tab:red')
+        #axs[1, 1].set_title('PBP')
+        #plt.show()
+
+
+        #for ax in axs.flat:
+         #   ax.set(xlabel='x-label', ylabel='y-label')
+        
+
 
 def is_positive(lista):  # se la lista è positiva
     result = True
@@ -214,3 +234,4 @@ a = Inv('mario',-10000.00,[-300,-200,-200,0,50,300,800,1200,3000,4000,6000,12000
 #a.plt_van_tasso()
 #a.plt_bar()
 #a.plt_box_plot()
+#a.plt_plot_all()
