@@ -132,10 +132,12 @@ class Inv(object):
         while j < self.len:
             van = round(np.npv(self.r, self.f_ar[:j+1]), 4)
             vans = np.append(vans, van)
+            # questo if è useless
             if vans[j] >= -100.0 and vans[j] <= 100.0:
                 PBP = j
                 print(f'PBP: {PBP}')
             j += 1
+
         if vans.size == self.len:
             print(f'VAN progressivi: \n{vans}')
             anni = np.array(range(self.len))
@@ -146,21 +148,29 @@ class Inv(object):
 
     def plt_plot_all(self):  # riguardare
         '''Plot dei 4 precendenti insieme'''
-        fig, axs = plt.subplots(2, 2)
-        #axs[0, 0].plot(x, y)
-        #axs[0, 0].set_title('VAN-TASSO')
-        #axs[0, 1].hist(self.f_ar)
-        #axs[0, 1].set_title('BARRE')
-        #axs[1, 0].plot(x, -y, 'tab:green')
-        #axs[1, 0].set_title('BOX-PLOT')
-        #axs[1, 1].plot(x, -y, 'tab:red')
-        #axs[1, 1].set_title('PBP')
-        #plt.show()
+        fig, (ax1, ax2) = plt.subplots(1, 2)
+        fig.suptitle('Grafici')
 
+        ax1.set_title('VAN-TASSO')
+        #ax1.plot(x, y)
 
-        #for ax in axs.flat:
-         #   ax.set(xlabel='x-label', ylabel='y-label')
-        
+        '''PBP'''
+        ax2.set_title('PBP')
+        vans = np.array([])
+        j = 0
+        while j < self.len:
+            van = round(np.npv(self.r, self.f_ar[:j+1]), 4)
+            vans = np.append(vans, van)
+            j += 1
+        if vans.size == self.len:
+            #print(f'VAN progressivi: \n{vans}')
+            anni = np.array(range(self.len))
+            ax2.plot(anni, vans, 'c-')
+            ax2.plot(anni, vans, 'rx')
+            ax2.plot([0, self.len], [0, 0], 'g--')
+            plt.show()
+
+        plt.show()
 
 
 def is_positive(lista):  # se la lista è positiva
