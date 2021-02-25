@@ -5,7 +5,7 @@ Created on Wed Dec  2 10:49:41 2020
 @author: david
 """
 
-import numpy as np, pandas as pd, matplotlib.pyplot as plt, psycopg2
+import numpy as np, pandas as pd, matplotlib.pyplot as plt, psycopg2, random
 
 
 class Inv(object):
@@ -238,6 +238,16 @@ def to_db(nome_inv: str, flussi):
 
 
 a = Inv('mario',-10000.00,[-300,-200,-200,0,50,300,800,1200,3000,4000,6000,12000,14000,20000,30000])
+b = Inv('gigio',-50000.00,[-300,-200,-500,0,50,300,800,1100,3000,4000,9000,12000,14000,20000,30000])
+c = Inv('c',-30000.00,[-300,-500,-200,0,100,300,800,1200,2000,4000,60000,12000,14000,20000,30000])
+d = Inv('d',-6000.00,[-1000,-200,-2000,0,500,400,700,60000,3000,44000,6000,17000,14000,20000,30000])
+e = Inv('e',-800000.00,[-300,-2000,-200,0,50,300,800,1200,3000,400000,6000,12000,14000,20000,30000])
+invs = [a, b, c, d, e]
+#nomi = [i.nome for i in invs]
+#print(invs)
+#print(nomi)
+
+
 # i grafici vengono mostrati uno alla volta, chiudendoli via via
 #print(a)
 #a.plt_PBP()
@@ -245,4 +255,53 @@ a = Inv('mario',-10000.00,[-300,-200,-200,0,50,300,800,1200,3000,4000,6000,12000
 #a.plt_bar()
 #a.plt_box_plot()
 #a.plt_plot_all()
-print(a)
+
+
+# cacciamoli in un albero
+class Node(object):
+    def __init__(self, oggetto):
+        self.right = None
+        self.left = None
+        self.data = oggetto.C0  # Inv
+        self.obj = oggetto
+
+    def __str__(self):
+        return f'{self.obj.nome, self.data}'
+
+
+def insert(n, value):  # Node, Inv
+    if value.C0 <= n.data:
+        if n.left:
+            insert(n.left, value)
+        else:
+            n.left = Node(value)
+    else: 
+        if n.right:
+            insert(n.right, value)
+        else:
+            n.right = Node(value)
+
+
+def ptf(values, n=None) -> Node:  # populate_tree_from
+    if n == None:
+        n = Node(values[0])  # Inv
+        values = values[1:]
+    for v in values:
+            insert(n, v)
+    return n
+
+
+def visit(n):
+    if n:
+        visit(n.left)
+        print(n.obj.nome, n.data) 
+        visit(n.right)
+
+'''
+values = [random.randint(1, 200) for i  in range(len(invs))]  # lista random
+#print(values)
+'''
+#values = [i.C0 for i in invs]
+root = ptf(invs)
+#print(root)
+#visit(root)
