@@ -257,7 +257,7 @@ def ins_to_db():  # praticamente una transazione
 
 #ins_to_db()
 
-
+"""
 a = Inv('mario',-10000.00,[-300,-200,-200,0,50,300,800,1200,3000,4000,6000,12000,14000,20000,30000])
 b = Inv('gigio',-50000.00,[-300,-200,-500,0,50,300,800,1100,3000,4000,9000,12000,14000,20000,30000])
 c = Inv('c',-30000.00,[-300,-500,-200,0,100,300,800,1200,2000,4000,60000,12000,14000,20000,30000])
@@ -267,7 +267,7 @@ invs = [a, b, c, d, e]
 #nomi = [i.nome for i in invs]
 #print(invs)
 #print(nomi)
-
+"""
 
 # i grafici vengono mostrati uno alla volta, chiudendoli via via
 #print(a)
@@ -318,11 +318,12 @@ def visit(n):
         print(n.obj.nome, n.data) 
         visit(n.right)
 
-'''
-values = [random.randint(1, 200) for i  in range(len(invs))]  # lista random
-#print(values)
-'''
+"""
+values = [random.randint(-200, 200) for i  in range(len(invs))]  # lista random
+print(values)
+"""
+
 #values = [i.C0 for i in invs]
-root = ptf(invs)
+#root = ptf(invs)
 #print(root)
 #visit(root)
