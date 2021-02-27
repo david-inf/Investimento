@@ -1,49 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 25 12:20:44 2020
 
-@author: david
-"""
-
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd 
-
-r = 0.0826 #0.1 #tasso di sconto, 10%
-
-def VAN(C0,flussi):
-    van = C0
-    global r
-    den = 1 + r
-    i  = 0
-    while i < len(flussi):
-        esp = i + 1
-        add = (flussi[i])/(den**esp)
-        van += add
-        i += 1     
-    print(round(van,4))
-'''
-def VAN2(C0,flussi,tasso): #meglio usare np.npv(rate,values)  
-    van = C0
-    den = 1 + tasso
-    i  = 0
-    while i < len(flussi):
-        esp = i + 1
-        add = (flussi[i])/(den**esp)
-        van += add
-        i += 1     
-    #print(round(van,4))
-    return round(van,4)
-'''
-def FD(anni): #fattore di rendita
-    global r
-    fd = 1/r - 1/(r*(1+r)**anni)
-    return round(fd,4)
-    
-def EA(van,anni):
-    global r
-    ea = van*(1/FD(anni))
-    print(round(ea,4))
 
 def main():
     global r

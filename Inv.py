@@ -216,8 +216,7 @@ def hey_db(query: str):  # query sul database Azienda
     cur.close()
     con.close()
 
-'''non fa'''
-def to_db(nome_inv: str, flussi):
+def ins_to_db():  # praticamente una transazione
     con = psycopg2.connect(
     host = '127.0.0.1',
     database = 'Azienda',
@@ -225,16 +224,38 @@ def to_db(nome_inv: str, flussi):
     password = 'david25',
     port = '5432')
 
-    for i in range(len(flussi)):
-        cur = con.cursor()
-        j = flussi[i]
-        cur.execute(f"insert into investimento values ({nome_inv}, {i}, {j})")
+    cur = con.cursor()
+    q = "insert into investimento values"
+    values = list()
+    n = int(input('tuple da inserire: '))
 
-    cur.fetchall()
+    for i in range(n):
+        N = input('Nome investimento: ')  # inserire con ''
+        A = input('Anno flusso: ')
+        F = input('Valore flusso: ')
+        values.append(' ' + '(' + N + ',' +  A + ',' + F + ')')
+
+    query = str()
+    for i in values:
+        Q = q + i
+        if len(query) < 1:
+            query += Q
+        else:
+            query += '; ' + Q
+
+    cur.execute(query)
+    cur.execute("select * from investimento")  # giusto per vedere se è aggiornato
+    rows = cur.fetchall()
+
+    for r in rows:
+        print(f' {r[0]} {r[1]} {r[2]}')  # investimento ha 3 attributi
 
     con.commit()
     cur.close()
     con.close()
+
+
+#ins_to_db()
 
 
 a = Inv('mario',-10000.00,[-300,-200,-200,0,50,300,800,1200,3000,4000,6000,12000,14000,20000,30000])
