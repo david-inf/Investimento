@@ -18,16 +18,6 @@ def main():
         print("1) Genera l'Inv")
         print('2) Visualizza Invs')
         print('3) Visualizza un Inv')
-        '''
-        
-        print('4) Aggiungi dei flussi a quelli già esistenti (in coda)')
-        print('5) Rimuovi uno o più flussi')
-        print('6) Calcola il TIR')
-        print('7) Grafico VAN-r')
-        print('8) PayBack Period')
-        #print('9) Inserisci altri flussi e confrontali con i precedenti')
-        print('10) Altra visualizzazione dei dati')
-        '''
         print('0) Esci')
 
         choice = input('Scelta: ')
@@ -35,7 +25,7 @@ def main():
         if choice == '1':
             N = input('Nome: ')
             A = int(input('Anni: '))
-            flussi = [random.randint(-500000, 2000000) for i in range(a)]
+            flussi = [random.randint(-500000, 2000000) for i in range(A)]
             I = iv.Inv(N, flussi[0], flussi[1:])
             Invs[I.nome] = I
 
@@ -51,8 +41,10 @@ def main():
 
         elif choice == '0':
            pass
-main()
+
+#main()
 
 
 Invs = {a.nome: a, b.nome: b, c.nome: c}
 #Invs['a'] = 22
+print(Invs.get('d'))
