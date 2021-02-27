@@ -216,6 +216,7 @@ def hey_db(query: str):  # query sul database Azienda
     cur.close()
     con.close()
 
+
 def ins_to_db():  # praticamente una transazione
     con = psycopg2.connect(
     host = '127.0.0.1',
