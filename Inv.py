@@ -18,11 +18,7 @@ class Inv(object):
         self.FDC = [C0] + flussi  # meglio usare gli array
         self.f_ar = np.array(self.FDC)  # li metto su array, non si sa mai
         self.len = self.f_ar.size  # numero di elementi
-
-        self.anni = []
-        for i in range(len(self.f_ar)):
-            a = 'anno '
-            self.anni.append(a+str(i))
+        self.anni = ['anno ' + str(i) for i in range(self.len)]  # list comprehension
 
         self.series = pd.Series(self.f_ar, index=self.anni)
         self.series.name = nome
