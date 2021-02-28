@@ -17,7 +17,7 @@ class Inv(object):
         self.r = tasso  # tasso di sconto
         self.FDC = [C0] + flussi  # meglio usare gli array
         self.f_ar = np.array(self.FDC)  # li metto su array, non si sa mai
-        self.len = self.f_ar.size  # numero di elementi
+        self.len = self.f_ar.size  # numero di elementi, senza contare C0
         self.anni = ['anno ' + str(i) for i in range(self.len)]  # list comprehension
 
         self.series = pd.Series(self.f_ar, index=self.anni)
@@ -34,33 +34,29 @@ class Inv(object):
 
     '''Blocco modifiche'''
 
-    def cg_add_tail(self, flussi: list):  # flussi è una lista; cg := change
+    def cg_add_tail(self, flussi: list) -> np.array:  # flussi è una lista; cg := change
         '''Aggiunge elementi in coda'''
-        # self.FDC = self.FDC + flussi #ricorda che li aggiunge in coda
-        # for i in flussi:
-        #   self.FDC.append(i)
         self.f_ar = np.append(self.f_ar, flussi)
+        return self.f_ar
 
-    def cg_add_here(self, posizione: int, flusso: float):
+    def cg_add_here(self, posizione: int, flusso: float) -> np.array:
         '''Aggiunge un elemento in una posizione precisa, l'anno'''
-        # self.FDC.insert(posizione,flusso)
         self.f_ar = np.insert(self.f_ar, posizione, flusso)
+        return self.f_ar
 
-    def cg_pop(self, anno: int):  # np.delete(array,index)
+    def cg_pop(self, anno: int) -> np.array:  # np.delete(array,index)
         '''Rimuove un elemento indicando l'anno'''
         self.f_ar = np.delete(self.f_ar, anno)
+        return self.f_ar
 
     '''Blocco visualizzazione'''
 
     def see_getMembers(self):
         '''Stampa la lista'''
-        # return self.FDC[:]
-        # print(self.f_ar)
         return self.f_ar
 
     def see_Member(self, flusso: float):
         '''True se c'è, False altrimenti'''
-        # return flusso in self.FDC
         return flusso in self.f_ar
 
     def __str__(self):  # permette di usare print(oggetto_Inv). Scelta migliore
@@ -69,17 +65,16 @@ class Inv(object):
 
     '''Blocco matematica finanziaria'''  # anche se è tutto su __init__
 
-    def cl_FD(self):  # cl := calculate
+    def cl_FD(self) -> float:  # cl := calculate
         '''Fattore di rendita'''
         # anni = self.len
         fd = 1/self.r - 1/(self.r*(1+self.r)**self.len)
         return round(fd, 4)
 
-    def cl_EA(self):
+    def cl_EA(self) -> np.array:
         '''Equivalente annuo'''
-        # anni = self.len
         van = round(np.npv(self.r, self.f_ar), 4)
-        ea = van*(1/Inv.FD(self))  # non so se funziona!!
+        ea = van*(1/Inv.cl_FD(self))
         return round(ea, 4)
 
     '''Blocco plotter'''
@@ -169,7 +164,7 @@ class Inv(object):
         plt.show()
 
 
-def is_positive(lista):  # se la lista è positiva
+def is_positive(lista) -> bool:  # se la lista è positiva
     result = True
     for i in lista:
         if i > 0:
@@ -179,7 +174,7 @@ def is_positive(lista):  # se la lista è positiva
     return result
 
 
-def from_positive(lista):  # deve andare nel PBP
+def from_positive(lista) -> int:  # deve andare nel PBP
     c = -1
     if lista[-1] < 0:
         # return print('Non diventa mai positiva')
